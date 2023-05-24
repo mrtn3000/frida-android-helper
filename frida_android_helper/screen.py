@@ -3,9 +3,13 @@ from frida_android_helper.utils import *
 from frida_android_helper.frida_utils import *
 
 
-def take_screenshot(filename=None):
+def take_screenshot(deviceid, filename=None):
     eprint("⚡️ Taking a screenshot...")
-    for device in get_devices():
+    if deviceid:
+        devices = get_device(deviceid)
+    else:
+        devices = get_devices()
+    for device in devices:
         signature = get_device_model(device).replace(" ", "")
         if filename is None:
             filename = "{}_{}.png".format(signature, datetime.now().strftime("%Y.%m.%d_%H.%M.%S"))

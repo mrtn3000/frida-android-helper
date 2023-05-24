@@ -2,9 +2,13 @@ from datetime import datetime
 from frida_android_helper.utils import *
 
 
-def take_snapshot(packagename=None):
+def take_snapshot(deviceid, packagename=None):
     eprint("⚡️ Taking a snapshot...")
-    for device in get_devices():
+    if deviceid:
+        devices = get_device(deviceid)
+    else:
+        devices = get_devices()
+    for device in devices:
         eprint("📲 Device: {} ({})".format(get_device_model(device), device.get_serial_no()))
         if packagename is None:  # get
             packagename, _ = get_current_app_focus(device)

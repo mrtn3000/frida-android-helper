@@ -8,13 +8,13 @@ from frida_android_helper.utils import *
 from os.path import isfile
 
 
-def setup_certificate(_=None):
+def setup_certificate(deviceid, _=None):
     eprint("⚡️ Setting up your device certificate...")
     generate_certificate()
     install_certificate()
 
 
-def generate_certificate(_=None):
+def generate_certificate(deviceid, _=None):
     eprint("⚡️ Generating certificate...")
 
     # Generate a private key
@@ -68,7 +68,7 @@ def generate_certificate(_=None):
         ))
 
 
-def install_certificate(certificate=None):
+def install_certificate(deviceid, certificate=None):
     eprint("⚡️ Installing certificate...")
     # hardcoded one from running
     # openssl x509 -inform DER -subject_hash_old -in fah_ca.der
@@ -100,7 +100,12 @@ def install_certificate(certificate=None):
             return
 
     # install them certificates on devices
-    for device in get_devices():
+    eprint("⚡️ Taking a snapshot...")
+    if deviceid:
+        devices = get_device(deviceid)
+    else:
+        devices = get_devices()
+    for device in devices:
         eprint("📲 Device: {} ({})".format(get_device_model(device), device.get_serial_no()))
         eprint("🔥 Pushing {} to {}/{}...".format(certificate, "/data/local/tmp", x509_old_hash))
         device.push(certificate, "/data/local/tmp/{}".format(x509_old_hash))

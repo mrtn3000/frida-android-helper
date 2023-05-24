@@ -32,31 +32,42 @@ def launch_frida_server(device: Device):
     perform_cmd(device, "{}{} && sleep 2147483647 &".format(FRIDA_INSTALL_DIR, FRIDA_BIN_NAME), root=True, timeout=1)
 
 
-def start_server():
+def start_server(deviceid):
     eprint("⚡️ Starting frida-server")
-    devices = get_devices()
+    if deviceid:
+        devices = get_device(deviceid)
+    else:
+        devices = get_devices()
+
     for device in devices:
         eprint("📲 Device: {} ({})".format(get_device_model(device), device.get_serial_no()))
         launch_frida_server(device)
 
 
-def stop_server():
+def stop_server(deviceid):
     eprint("⚡️ Stopping frida-server")
-    devices = get_devices()
+    if deviceid:
+        devices = get_device(deviceid)
+    else:
+        devices = get_devices()
+
     for device in devices:
         eprint("📲 Device: {} ({})".format(get_device_model(device), device.get_serial_no()))
         perform_cmd(device, "pkill frida-server", True)
 
 
-def reboot_server():
+def reboot_server(deviceid):
     eprint("⚡️ Rebooting frida-server")
-    stop_server()
-    start_server()
+    stop_server(deviceid)
+    start_server(deviceid)
 
 
-def update_server():
+def update_server(deviceid):
     eprint("⚡️ Updating frida-server")
-    devices = get_devices()
+    if deviceid:
+        devices = get_device(deviceid)
+    else:
+        devices = get_devices()
     for device in devices:
         eprint("📲 Device: {} ({})".format(get_device_model(device), device.get_serial_no()))
         server_binary = download_latest_frida(device)

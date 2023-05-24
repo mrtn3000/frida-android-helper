@@ -4,9 +4,13 @@ import os
 from frida_android_helper.utils import *
 
 
-def download_app(packagename=None):
+def download_app(deviceid, packagename=None):
     eprint("⚡️ Downloading app...")
-    for device in get_devices():
+    if deviceid:
+        devices = get_device(deviceid)
+    else:
+        devices = get_devices()
+    for device in devices:
         eprint("📲 Device: {} ({})".format(get_device_model(device), device.get_serial_no()))
         if packagename is None:  # get
             packagename, _ = get_current_app_focus(device)
@@ -38,14 +42,18 @@ def download_app(packagename=None):
                 device.pull(package, save_package)
 
 
-def list_apps(filter=None):
+def list_apps(deviceid, filter=None):
     if filter is None:
         filter = ""
         eprint("⚡️ List all packages...")
     else:
         eprint("⚡️ List packages using filter '{}'...".format(filter))
 
-    for device in get_devices():
+    if deviceid:
+        devices = get_device(deviceid)
+    else:
+        devices = get_devices()
+    for device in devices:
         eprint("📲 Device: {} ({})".format(get_device_model(device), device.get_serial_no()))
         for package in list_apps_for_device(device, filter):
             print(package)

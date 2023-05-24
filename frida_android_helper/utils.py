@@ -25,6 +25,23 @@ def get_devices():
         eprint("⚠️  no devices connected!")
     return devices
 
+def get_device(deviceid):
+    for attempt in range(2):
+        try:
+            client = AdbClient(host="127.0.0.1", port=5037)
+            client.version()  # a random call to check if adb server is up
+        except Exception as err:
+            eprint(str(err))
+            eprint("⚡ Starting ADB server...")
+            subprocess.run(["adb", "start-server"])
+
+    device = client.device(serial=deviceid) 
+    if not device:
+        eprint("⚠️ device not connected!")
+        return []
+    else:
+        return [device] 
+    
 
 def perform_cmd(device: Device, command: str, root: bool = False, timeout: int = None):
     if root:

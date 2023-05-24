@@ -23,6 +23,10 @@ It uses `pure-python-adb` to interface with the ADB server.
 Commands are self explanatory. Ask for help `fah --help`.
 
 
+### Multi-Device support
+- `fah -d ANDROID_ID [cmd]` will run the following command on the specified android, otherwise it will be run on all connected devices.
+
+
 ### Frida-server management
 
 - Start the frida-server `fah server start`
