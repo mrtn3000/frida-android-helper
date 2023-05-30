@@ -23,7 +23,7 @@ def enable_proxy(deviceid, host=None, port="8080"):
         eprint("🔥 settings put global http_proxy {}:{} => {}".format(host, port, result.strip()))
 
 
-def disable_proxy(device):
+def disable_proxy(deviceid):
     eprint("⚡️ Disabling the Android proxy...")
     if deviceid:
         devices = get_device(deviceid)
